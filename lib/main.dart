@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './getResponse.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.green,
       ),
-      home: MyHomePage(title: '僕たちの初めてのアプリ'),
+      home: MyHomePage(title: '僕たちの初めてのアプリ!'),
     );
   }
 }
@@ -46,6 +47,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
+  String _data = "";
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -55,6 +57,21 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    print("initState");
+    _getHttpConnect();
+  }
+
+   _getHttpConnect() async {
+    var getHttpResopnse = new getResponse();
+    String url = "http://weather.livedoor.com/forecast/webservice/json/v1?city=130010";
+    var response = await getHttpResopnse.fetchGet(url);
+
+    return _data = response.body.substring(0,100);
   }
 
   @override
@@ -90,9 +107,10 @@ class _MyHomePageState extends State<MyHomePage> {
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
+
           children: <Widget>[
             Text(
-              'You have pushed the button this many times:',
+              _data
             ),
             Text(
               '$_counter',
